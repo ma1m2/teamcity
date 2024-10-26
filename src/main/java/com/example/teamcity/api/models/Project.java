@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Project {
+public class Project  extends BaseModel{
     private String id;
     private String name;
     @Builder.Default
