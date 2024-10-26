@@ -8,7 +8,7 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
-public class Specifications {
+public class Specs {
 
     private static RequestSpecBuilder reqBuilder() {
         var requestBuilder = new RequestSpecBuilder();
@@ -19,7 +19,7 @@ public class Specifications {
         return requestBuilder;
     }
 
-    public static RequestSpecification superUserAuth() {
+    public static RequestSpecification superUserSpec() {
         var requestBuilder = reqBuilder();
         requestBuilder.setBaseUri("http://%s:%s@%s/httpAuth".formatted("", Config.getProperty("superUserToken"), Config.getProperty("host")));
         return requestBuilder.build();
