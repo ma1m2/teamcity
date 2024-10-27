@@ -4,20 +4,45 @@ import com.example.teamcity.api.enums.Endpoint;
 import com.example.teamcity.api.models.BuildType;
 import com.example.teamcity.api.models.Project;
 import com.example.teamcity.api.models.User;
+import com.example.teamcity.api.requests.CheckedRequests;
 import com.example.teamcity.api.requests.checked.CheckedBase;
 import com.example.teamcity.api.spec.Specs;
 import org.apache.http.HttpStatus;
 import io.restassured.RestAssured;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.example.teamcity.api.enums.Endpoint.*;
 import static com.example.teamcity.api.generators.TestDataGenerator.generate;
 import static io.qameta.allure.Allure.step;
 
 @Test(groups = {"Regression"})
 public class BuildTypTest extends BaseApiTest{
 
+    //1.19 Улучшаем тест на билд конфигурацию
+    @Test(description = "User should be able to create build type", groups = {"Positive", "CRUD"})
+    public void userCreatesBuildTypeTest1() {
+        var user = generate(User.class);
+
+        superUserCheckRequests.getRequest(USERS).create(user);
+        var userCheckRequests = new CheckedRequests(Specs.authSpec(user));
+
+        var project = generate(Project.class);
+
+        project = userCheckRequests.<Project>getRequest(PROJECTS).create(project);
+
+        var buildType = generate(Arrays.asList(project), BuildType.class);
+
+        userCheckRequests.getRequest(BUILD_TYPES).create(buildType);
+
+        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(buildType.getId());
+
+        softy.assertEquals(buildType.getName(), createdBuildType.getName(), "Build type name is not correct");
+    }
+
+    //1.18 Тест на билд конфигурацию
     @Test(description = "User should be able to create build type", groups = {"Positive", "CRUD"})
     public void userCreatesBuildTypeTest() {
         var user = generate(User.class);
@@ -27,7 +52,7 @@ public class BuildTypTest extends BaseApiTest{
                     .build();*/
 
         step("Create user", () ->  {
-            var requester = new CheckedBase<User>(Specs.superUserSpec(), Endpoint.USERS);
+            var requester = new CheckedBase<User>(Specs.superUserSpec(), USERS);
             requester.create(user);
         });
 
@@ -35,14 +60,14 @@ public class BuildTypTest extends BaseApiTest{
         AtomicReference<String> projectId = new AtomicReference<>("");
 
         step("Create project by user", () -> {
-            var requester = new CheckedBase<Project>(Specs.authSpec(user), Endpoint.PROJECTS);
+            var requester = new CheckedBase<Project>(Specs.authSpec(user), PROJECTS);
             projectId.set(requester.create(project).getId());
         });
 
         var buildType = generate(BuildType.class);
         buildType.setProject(Project.builder().id(projectId.get()).locator(null).build());
 
-        var requester = new CheckedBase<BuildType>(Specs.authSpec(user), Endpoint.BUILD_TYPES);
+        var requester = new CheckedBase<BuildType>(Specs.authSpec(user), BUILD_TYPES);
         AtomicReference<String> buildTypeId = new AtomicReference<>("");
 
         step("Create buildType for project by user", () -> {
