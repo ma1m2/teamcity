@@ -22,7 +22,7 @@ import static io.qameta.allure.Allure.step;
 
 @Test(groups = {"Regression"})
 public class BuildTypTest extends BaseApiTest {
-    //1.21 Uss TestData
+    //1.21 Use TestData
     @Test(description = "User should be able to create build type", groups = {"Positive", "CRUD"})
     public void userCreatesBuildTypeTestUseTestData() {
         //Create user
@@ -41,7 +41,7 @@ public class BuildTypTest extends BaseApiTest {
                 , "Build type name is not correct");
     }
 
-    //1.21 Uss TestData Hегативный тест по созданию билд конфигурации
+    //1.21 Use TestData Негативный тест по созданию билд конфигурации
     @Test(description = "User should not be able to create two build types with the same id", groups = {"Negative", "CRUD"})
     public void userCreatesTwoBuildTypesWithTheSameIdTestUseTestData() {
         //step("Create buildTypeWithTheSameId with same id as buildType for project by user");
