@@ -21,7 +21,47 @@ import static com.example.teamcity.api.generators.TestDataGenerator.generate;
 import static io.qameta.allure.Allure.step;
 
 @Test(groups = {"Regression"})
-public class BuildTypTest extends BaseApiTest{
+public class BuildTypTest extends BaseApiTest {
+    //1.21 Uss TestData
+    @Test(description = "User should be able to create build type", groups = {"Positive", "CRUD"})
+    public void userCreatesBuildTypeTestUseTestData() {
+        //Create user
+        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
+
+        //Create project by user
+        var userCheckRequests = new CheckedRequests(Specs.authSpec(testData.getUser()));
+        userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
+
+        //Create buildType for project by user
+        userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
+
+        //Check buildType was created successfully with correct data
+        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(testData.getBuildType().getId());
+        softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName()
+                , "Build type name is not correct");
+    }
+
+    //1.21 Uss TestData Hегативный тест по созданию билд конфигурации
+    @Test(description = "User should not be able to create two build types with the same id", groups = {"Negative", "CRUD"})
+    public void userCreatesTwoBuildTypesWithTheSameIdTestUseTestData() {
+        //step("Create buildTypeWithTheSameId with same id as buildType for project by user");
+        var buildTypeWithTheSameId = generate(Arrays.asList(testData.getProject())
+                , BuildType.class, testData.getBuildType().getId());
+
+        //step("Create user");
+        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
+
+        //step("Create project by user");
+        var userCheckRequests = new CheckedRequests(Specs.authSpec(testData.getUser()));
+        userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
+
+        //step("Check buildType2 was not created with bad request code");
+        userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
+        new UncheckedBase(Specs.authSpec(testData.getUser()), BUILD_TYPES)
+                .create(buildTypeWithTheSameId)
+                .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST)
+                .body(Matchers.containsString("The build configuration / template ID \"%s\" is already used by another configuration or template".formatted(testData.getBuildType().getId())));
+    }
 
     //1.19 Улучшаем тест на билд конфигурацию
     @Test(description = "User should be able to create build type", groups = {"Positive", "CRUD"})
@@ -53,7 +93,7 @@ public class BuildTypTest extends BaseApiTest{
                     .password(RandomData.getString())
                     .build();*/
 
-        step("Create user", () ->  {
+        step("Create user", () -> {
             var requester = new CheckedBase<User>(Specs.superUserSpec(), USERS);
             requester.create(user);
         });
@@ -76,33 +116,31 @@ public class BuildTypTest extends BaseApiTest{
             buildTypeId.set(requester.create(buildType).getId());
         });
 
-        step("Check buildType was created successfully with correct data", () ->  {
+        step("Check buildType was created successfully with correct data", () -> {
             var createdBuildType = requester.read(buildTypeId.get());
 
             softy.assertEquals(buildType.getName(), createdBuildType.getName(), "Build type name is not correct");
         });
     }
 
-    //1.20 Negative Test
+    //1.20 Hегативный тест по созданию билд конфигурации
     @Test(description = "User should not be able to create two build types with the same id", groups = {"Negative", "CRUD"})
     public void userCreatesTwoBuildTypesWithTheSameIdTest() {
         //step("Create user");
-        //step("Create project by user");
-        //step("Create buildType1 for project by user");
-        //step("Create buildType2 with same id as buildType1 for project by user");
-        //step("Check buildType2 was not created with bad request code");
         var user = generate(User.class);
-
         superUserCheckRequests.getRequest(USERS).create(user);
+
+        //step("Create project by user");
         var userCheckRequests = new CheckedRequests(Specs.authSpec(user));
-
         var project = generate(Project.class);
-
         project = userCheckRequests.<Project>getRequest(PROJECTS).create(project);
 
+        //step("Create buildType1 for project by user");
         var buildType1 = generate(Arrays.asList(project), BuildType.class);
+        //step("Create buildType2 with same id as buildType1 for project by user");
         var buildType2 = generate(Arrays.asList(project), BuildType.class, buildType1.getId());
 
+        //step("Check buildType2 was not created with bad request code");
         userCheckRequests.getRequest(BUILD_TYPES).create(buildType1);
         new UncheckedBase(Specs.authSpec(user), BUILD_TYPES)
                 .create(buildType2)
@@ -136,7 +174,7 @@ public class BuildTypTest extends BaseApiTest{
 
     //video 1.11
     @Test
-    public void buildconfigurationTest(){
+    public void buildconfigurationTest() {
         var user = User.builder()
                 .username("admin")
                 .password("admin")
