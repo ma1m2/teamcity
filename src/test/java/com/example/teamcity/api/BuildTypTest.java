@@ -60,7 +60,9 @@ public class BuildTypTest extends BaseApiTest {
         new UncheckedBase(Specs.authSpec(testData.getUser()), BUILD_TYPES)
                 .create(buildTypeWithTheSameId)
                 .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body(Matchers.containsString("The build configuration / template ID \"%s\" is already used by another configuration or template".formatted(testData.getBuildType().getId())));
+                .body(Matchers.containsString(
+                        "The build configuration / template ID \"%s\" is already used by another configuration or template"
+                        .formatted(testData.getBuildType().getId())));
     }
 
     //1.19 Улучшаем тест на билд конфигурацию
