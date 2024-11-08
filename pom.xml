@@ -18,6 +18,7 @@
         <rest-assured.version>5.1.1</rest-assured.version>
         <lombok.version>1.18.30</lombok.version>
         <jackson.version>2.17.2</jackson.version>
+        <selenide.version>7.4.3</selenide.version>
     </properties>
 
     <dependencies>
@@ -55,7 +56,7 @@
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide-testng</artifactId>
-            <version>7.2.3</version>
+            <version>${selenide.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -64,6 +65,13 @@
             <version>${allure.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.codeborne/selenide -->
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>${selenide.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
