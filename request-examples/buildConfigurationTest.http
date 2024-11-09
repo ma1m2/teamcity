@@ -78,7 +78,7 @@ Accept: application/json
 
 ###
 ### GET request to example server
-### GET http://admin:admin@172.18.144.1:8111/app/rest/projects/
-### Accept: application/json
+GET http://admin:admin@172.18.144.1:8111/app/rest/projects/name:test_lfaZcJZoxi
+Accept: application/json
 
 ###

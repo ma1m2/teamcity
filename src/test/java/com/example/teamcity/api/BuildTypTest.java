@@ -35,7 +35,8 @@ public class BuildTypTest extends BaseApiTest {
         userCheckRequests.getRequest(BUILD_TYPES).create(testData.getBuildType());
 
         //Check buildType was created successfully with correct data
-        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(testData.getBuildType().getId());
+        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES)
+                .read("id:" + testData.getBuildType().getId());
         softy.assertEquals(testData.getBuildType().getName(), createdBuildType.getName()
                 , "Build type name is not correct");
     }
@@ -61,7 +62,7 @@ public class BuildTypTest extends BaseApiTest {
                 .then().assertThat().statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body(Matchers.containsString(
                         "The build configuration / template ID \"%s\" is already used by another configuration or template"
-                        .formatted(testData.getBuildType().getId())));
+                                .formatted(testData.getBuildType().getId())));
     }
 
     //1.19 Улучшаем тест на билд конфигурацию
@@ -81,7 +82,7 @@ public class BuildTypTest extends BaseApiTest {
         userCheckRequests.getRequest(BUILD_TYPES).create(buildType);
 
         //Check buildType was created successfully with correct data
-        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read(buildType.getId());
+        var createdBuildType = userCheckRequests.<BuildType>getRequest(BUILD_TYPES).read("id:" + buildType.getId());
         softy.assertEquals(buildType.getName(), createdBuildType.getName(), "Build type name is not correct");
     }
 
@@ -118,7 +119,7 @@ public class BuildTypTest extends BaseApiTest {
         });
 
         step("Check buildType was created successfully with correct data", () -> {
-            var createdBuildType = requester.read(buildTypeId.get());
+            var createdBuildType = requester.read("id:" + buildTypeId.get());
 
             softy.assertEquals(buildType.getName(), createdBuildType.getName(), "Build type name is not correct");
         });
