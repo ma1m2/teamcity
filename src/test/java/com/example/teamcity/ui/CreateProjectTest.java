@@ -15,7 +15,6 @@ import static io.qameta.allure.Allure.step;
 @Test(groups = {"Regression"})
 public class CreateProjectTest extends BaseUiTest{
     //private static final String REPO_URL = "https://github.com/AlexPshe/spring-core-for-qa";
-    private static final String REPO_URL = "https://github.com/ma1m2/cucumberJava";
 
     @Test(description = "User should be able to create Project", groups = {"Positive"})
     public void userCreatesProject(){
@@ -27,7 +26,7 @@ public class CreateProjectTest extends BaseUiTest{
         step("Open `Create Project Page` (http://localhost:8111/admin/createObjectMenu.html)");
         step("Send all project parameters (repository URL)");
         step("Click `Proceed`");
-        step("Fix Project Name and Build Type name values");
+        step("Fix 'Build configuration name: *' values");
         step("Click `Proceed`");
         CreateProjectPage.open("_Root")
                 .createForm(REPO_URL)
