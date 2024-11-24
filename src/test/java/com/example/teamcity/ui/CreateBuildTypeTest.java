@@ -2,18 +2,18 @@ package com.example.teamcity.ui;
 
 import com.codeborne.selenide.Condition;
 import com.example.teamcity.api.enums.Endpoint;
-import com.example.teamcity.api.generators.TestDataStorage;
 import com.example.teamcity.api.models.BuildType;
 import com.example.teamcity.api.models.Project;
 import com.example.teamcity.api.requests.CheckedRequests;
+import com.example.teamcity.api.requests.unchecked.UncheckedBase;
 import com.example.teamcity.api.spec.Specs;
 import com.example.teamcity.ui.pages.BuildConfigurationPage;
-import com.example.teamcity.ui.pages.ProjectPage;
-import com.example.teamcity.ui.pages.ProjectsPage;
 import com.example.teamcity.ui.pages.admin.CreateBuildTypePage;
-import com.example.teamcity.ui.pages.admin.CreateProjectPage;
+import org.apache.http.HttpStatus;
+import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
+import static com.example.teamcity.api.enums.Endpoint.BUILD_TYPES;
 import static com.example.teamcity.api.enums.Endpoint.PROJECTS;
 import static io.qameta.allure.Allure.step;
 
@@ -63,6 +63,12 @@ public class CreateBuildTypeTest  extends BaseUiTest{
         //Try to create Build Type with empty repo Url
         CreateBuildTypePage.open(testData.getProject().getId())
                 .getErrorEmptyRepoUrl().errorUrl.shouldHave(Condition.exactText("URL must not be empty"));
+
+        //Check that list of BuildTypes of project is empty /app/rest/projects/<projectLocator>/buildTypes
+        new UncheckedBase(Specs.authSpec(testData.getUser()), PROJECTS)
+                .read(testData.getProject().getId() + "/buildTypes")
+                .then().assertThat().statusCode(HttpStatus.SC_OK)
+                .body("count", Matchers.equalTo(0));
 
     }
 
