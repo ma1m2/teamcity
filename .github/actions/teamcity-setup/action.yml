@@ -65,14 +65,14 @@ runs:
       shell: bash
       run: cat src/main/resources/config.properties
 
+    - name: Make mvnw executable
+      shell: bash
+      run: chmod +x mvnw
+
     - name: Setup TeamCity server
       shell: bash
       # Настройка сервера при первом запуске (принятие лицензии, выбор базы данных и тд), реализованная в виде теста
       run: ./mvnw clean test -Dtest=SetupServerTest#setupTeamCityServerTest
-
-    - name: Make mvnw executable
-      shell: bash
-      run: chmod +x mvnw
 
     - name: Setup superUserToken environment variable
       shell: bash
