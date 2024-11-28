@@ -40,6 +40,9 @@ jobs:
         # Указываем группу, чтобы не запустить тесты, связанные с сетапом TeamCity
         run: ./mvnw test -Dtest='com.example.teamcity.${{ inputs.package }}.**' -Dgroups=Regression
 
+      - name: Make mvnw executable
+        run: chmod +x .swagger-coverage-commandline/bin/swagger-coverage-commandline
+
       # Создаем репорт с покрытием API тестов, основанном на Swagger.
       # Документация: https://github.com/viclovsky/swagger-coverage
       # Обязательно добавить фильтр SwaggerCoverageRestAssured в RestAssured
