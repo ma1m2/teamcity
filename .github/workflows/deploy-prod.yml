@@ -2,7 +2,7 @@ name: Deploy to prod
 
 on: workflow_call
 
-# Это лишь примерные степы, как может выглядеть пайплайн фронтенда
+# Это лишь примерные степы, как может деплой на прод
 jobs:
   test:
     runs-on: ubuntu-latest
