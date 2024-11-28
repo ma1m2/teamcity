@@ -32,7 +32,7 @@ public class ProjectTest extends BaseApiTest {
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
 
         //Check project was created successfully with correct data
-        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read(testData.getProject().getId());
+        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read("id:" + testData.getProject().getId());
         softy.assertEquals(testData.getProject().getName(), createdProject.getName()
                 , "Project name is not correct");
     }
@@ -104,7 +104,7 @@ public class ProjectTest extends BaseApiTest {
         userCheckRequests.<Project>getRequest(PROJECTS).create(project);
 
         //Check project was created successfully with correct data
-        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read(testData.getProject().getId());
+        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read("id:" + testData.getProject().getId());
         softy.assertEquals(testData.getProject().getName(), createdProject.getName()
                 , "Project name is not correct");
 

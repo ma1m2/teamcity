@@ -13,6 +13,7 @@ import com.codeborne.selenide.Configuration;
 import java.util.Map;
 
 public class BaseUiTest extends BaseTest {
+    protected static final String REPO_URL = "https://github.com/ma1m2/cucumberJava";
 
     @BeforeSuite(alwaysRun = true)
     public void setupUiTest(){
