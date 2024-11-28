@@ -13,9 +13,7 @@ import org.apache.http.HttpStatus;
 import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
-import static com.example.teamcity.api.enums.Endpoint.BUILD_TYPES;
 import static com.example.teamcity.api.enums.Endpoint.PROJECTS;
-import static io.qameta.allure.Allure.step;
 
 @Test(groups = {"Regression"})
 public class CreateBuildTypeTest  extends BaseUiTest{
@@ -30,11 +28,11 @@ public class CreateBuildTypeTest  extends BaseUiTest{
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
 
         // взаимодействие с UI
-        step("Open `Create Build Configuration` (http://localhost:8111/admin/createObjectMenu.html)");
+/*        step("Open `Create Build Configuration` (http://localhost:8111/admin/createObjectMenu.html)");
         step("Fill in 'Repository URL*' field ");
         step("Click `Proceed`");
         step("Fix Project Name and Build Type name values");
-        step("Click `Proceed`");
+        step("Click `Proceed`");*/
 
         CreateBuildTypePage.open(testData.getProject().getId())
                 .createForm(REPO_URL)
@@ -46,7 +44,7 @@ public class CreateBuildTypeTest  extends BaseUiTest{
         softy.assertNotNull(createdBuildType);
 
         // проверка состояния UI (корректность считывания данных и отображение данных на UI)
-        step("Check that Build Type is visible on Build Configuration Page (http://localhost:8111/buildConfiguration/{buildTypeId})");
+        //"Check that Build Type is visible on Build Configuration Page (http://localhost:8111/buildConfiguration/{buildTypeId})"
         BuildConfigurationPage.open(createdBuildType.getId())
                 .title.shouldHave(Condition.exactText(testData.getBuildType().getName()));
     }
