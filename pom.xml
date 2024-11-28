@@ -19,6 +19,7 @@
         <lombok.version>1.18.30</lombok.version>
         <jackson.version>2.17.2</jackson.version>
         <selenide.version>7.4.3</selenide.version>
+        <swagger-coverage-version>1.5.0</swagger-coverage-version>
     </properties>
 
     <dependencies>
@@ -89,6 +90,11 @@
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectj.version}</version>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.viclovsky</groupId>
+            <artifactId>swagger-coverage-rest-assured</artifactId>
+            <version>${swagger-coverage-version}</version>
         </dependency>
 
     </dependencies>
