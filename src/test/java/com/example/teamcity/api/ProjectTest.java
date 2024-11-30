@@ -17,6 +17,7 @@ import java.util.List;
 import static com.example.teamcity.api.enums.Endpoint.PROJECTS;
 import static com.example.teamcity.api.enums.Endpoint.USERS;
 import static com.example.teamcity.api.generators.TestDataGenerator.generate;
+import static io.qameta.allure.Allure.step;
 
 @Test(groups = {"Regression"})
 public class ProjectTest extends BaseApiTest {
@@ -25,16 +26,23 @@ public class ProjectTest extends BaseApiTest {
             groups = {"Positive", "CRUD"})
     public void userCreateProject() {
         //Create user
+        step("Create user", () -> {
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
+        });
 
         //Create project by user
         var userCheckRequests = new CheckedRequests(Specs.authSpec(testData.getUser()));
+
+        step("Create project by user", () -> {
         userCheckRequests.<Project>getRequest(PROJECTS).create(testData.getProject());
+        });
 
         //Check project was created successfully with correct data
+        step("Check project was created successfully with correct data", () -> {
         var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read("id:" + testData.getProject().getId());
         softy.assertEquals(testData.getProject().getName(), createdProject.getName()
                 , "Project name is not correct");
+        });
     }
 
     @Test(description = "User should not be able to create two project with the same ID",
