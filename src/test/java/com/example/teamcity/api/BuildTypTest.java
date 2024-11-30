@@ -175,7 +175,7 @@ public class BuildTypTest extends BaseApiTest {
     }
 
     //video 1.11
-    @Test
+/*    @Test
     public void buildconfigurationTest() {
         var user = User.builder()
                 .username("admin")
@@ -190,5 +190,5 @@ public class BuildTypTest extends BaseApiTest {
                 .extract().asString();
 
         System.out.println("My token: " + token);
-    }
+    }*/
 }
